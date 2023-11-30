@@ -13,9 +13,20 @@ class Solution : Solver {
         GetCaloriesPerElf(input).Take(3).Sum();
 
     // Returns the calories carried by the elves in descending order.
-    private IEnumerable<int> GetCaloriesPerElf(string input) =>
-        from elf in input.Split("\n\n")
-        let calories = elf.Split('\n').Select(int.Parse).Sum()
-        orderby calories descending
-        select calories;
+    private IEnumerable<int> GetCaloriesPerElf(string input)
+    {
+        var elfs = input.Split("\n\n");
+        var calories = new List<int>();
+        foreach (var elf in elfs)
+        {
+            calories.Add(elf.Split("\n").Select(int.Parse).Sum());
+        }
+
+        return calories.OrderDescending();
+    }
+    // private IEnumerable<int> GetCaloriesPerElf(string input) =>
+    //     from elf in input.Split("\n\n")
+    //     let calories = elf.Split('\n').Select(int.Parse).Sum()
+    //     orderby calories descending
+    //     select calories;
 }
