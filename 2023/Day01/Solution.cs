@@ -1,22 +1,16 @@
-using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Text;
-using Microsoft.CodeAnalysis.Text;
 
 namespace AdventOfCode.Y2023.Day01;
 
 [ProblemName("Trebuchet?!")]
-class Solution : Solver {
-
+class Solution : Solver
+{
     public object PartOne(string input)
     {
         var data = input.Split("\n");
-        var results = new List<int>();
-        
+        List<int> results = new();
+
         foreach (var d in data)
         {
             var numbers = string.Concat(d.Where(char.IsNumber));
@@ -40,6 +34,7 @@ class Solution : Solver {
         foreach (var d in data)
         {
             List<int> numbers = new();
+
             for (int i = 0; i < d.Length; i++)
             {
                 if (char.IsNumber(d[i]))
@@ -50,7 +45,7 @@ class Solution : Solver {
 
                 foreach (var (text, number) in textNumbers)
                 {
-                    // Si on trouve un des nombres en littéral, on ajoute la valeur correspondante
+                    // Check if the text is in the string (and not out of bounds)
                     if (i + text.Length - 1 < d.Length && d[i..(i + text.Length)] == text)
                     {
                         numbers.Add(number);
