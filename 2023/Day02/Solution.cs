@@ -116,7 +116,6 @@ class Solution : Solver
     {
         List<int> result = new();
 
-        // On utilise la classe Set pour stocker les minimums
         foreach (var game in games)
         {
             Set min = new()
