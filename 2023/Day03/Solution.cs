@@ -8,7 +8,7 @@ namespace AdventOfCode.Y2023.Day03;
 class Solution : Solver
 {
     private readonly List<Number> partNumbers = new();
-    private List<Gear> gears = new();
+    private readonly List<Gear> gears = new();
 
     public object PartOne(string input)
     {
@@ -252,7 +252,7 @@ public class Number
 
 public class Gear
 {
-    public List<Number> PartNumbers { get; set; }
+    public List<Number> PartNumbers { get; init; }
 }
 
 public class Coordinate
