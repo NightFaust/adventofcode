@@ -46,8 +46,6 @@ class Solution : Solver
                     {
                         gear = new Gear
                         {
-                            SlotIndex = slotIndex,
-                            LineIndex = lineIndex,
                             PartNumbers = new List<Number>()
                         };
                     }
@@ -145,14 +143,11 @@ class Solution : Solver
 
         IterateLeft(slotIndex, line, number);
         IterateRight(slotIndex, line, number);
-
-        // On calcul la value final
         number.Value = ComputeValue(number);
 
         if (!CheckIfNumberAlreadyListed(slotIndex, lineIndex))
         {
             number.Id = Guid.NewGuid();
-            // On liste le numéro
             partNumbers.Add(number);
         }
         
@@ -246,28 +241,27 @@ class Solution : Solver
 public class Number
 {
     public Guid Id { get; set; }
-    public List<Coordinate> Coordinates { get; set; }
+    
+    public List<Coordinate> Coordinates { get; init; }
 
     // Un nombre ne peut être que sur une seule ligne
-    public int Y { get; set; }
+    public int Y { get; init; }
 
     public int Value { get; set; }
 }
 
 public class Gear
 {
-    public int SlotIndex { get; set; }
-    public int LineIndex { get; set; }
     public List<Number> PartNumbers { get; set; }
 }
 
 public class Coordinate
 {
-    public int X { get; set; }
+    public int X { get; init; }
 
-    public int Value { get; set; }
+    public int Value { get; init; }
 
-    public int Order { get; set; }
+    public int Order { get; init; }
 }
 
 public enum SlotType
