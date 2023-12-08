@@ -15,35 +15,7 @@ class Solution : Solver
             hand.Type = GetHandType(hand.Cards);
         }
 
-        var handsOrdered = hands.GroupBy(h => h.Type)
-            .OrderBy(t => (int)t.Key)
-            .ToList();
-
-        var rank = 1;
-        var result = 0;
-        foreach (var orderHand in handsOrdered)
-        {
-            if (orderHand.Count() == 1)
-            {
-                result += orderHand.First().Bid * rank;
-                rank++;
-            }
-            else
-            {
-                // sort all hands by first card of each hand
-                var sortedHands = orderHand.OrderBy(h => h.Cards.First().Strength).ToList();
-                sortedHands.Sort(new HandComparer());
-
-                // Display sorted hands
-                foreach (var hand in sortedHands)
-                {
-                    result += hand.Bid * rank;
-                    rank++;
-                }
-            }
-        }
-
-        return result;
+        return ComputeFinalScore(hands);
     }
 
     public object PartTwo(string input)
@@ -55,6 +27,11 @@ class Solution : Solver
             hand.Type = GetHandType(hand.Cards, isPart2: true);
         }
 
+        return ComputeFinalScore(hands);
+    }
+
+    private static int ComputeFinalScore(IEnumerable<Hand> hands)
+    {
         var handsOrdered = hands.GroupBy(h => h.Type)
             .OrderBy(t => (int)t.Key)
             .ToList();
@@ -102,8 +79,7 @@ class Solution : Solver
                 cards.Add(new Card
                 {
                     Name = card.ToString(),
-                    Strength = isPart2 ? GetCardStrengthPart2(card) : GetCardStrength(card),
-                    Index = i
+                    Strength = isPart2 ? GetCardStrengthPart2(card) : GetCardStrength(card)
                 });
             }
 
@@ -143,7 +119,7 @@ class Solution : Solver
         };
     }
 
-    private static Type GetHandType(List<Card> cards, bool isPart2 = false)
+    private static Type GetHandType(IReadOnlyCollection<Card> cards, bool isPart2 = false)
     {
         var cardGroups = cards.GroupBy(card => card.Name).ToList();
         var cardGroupCount = cardGroups.Count;
@@ -183,8 +159,8 @@ class Solution : Solver
 
 public class Hand
 {
-    public List<Card> Cards { get; set; }
-    public int Bid { get; set; }
+    public List<Card> Cards { get; init; }
+    public int Bid { get; init; }
     public Type Type { get; set; }
 }
 
@@ -201,9 +177,8 @@ public enum Type
 
 public class Card
 {
-    public string Name { get; set; }
-    public int Strength { get; set; }
-    public int Index { get; set; }
+    public string Name { get; init; }
+    public int Strength { get; init; }
 }
 
 public class HandComparer : IComparer<Hand>
