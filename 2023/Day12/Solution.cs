@@ -70,7 +70,7 @@ class Solution : Solver
                 return 1;
             }
 
-            if (blockIndex == blocks.Count - 1 && blocks[(int)blockIndex] == current)
+            if (blockIndex == blocks.Count - 1 && blocks[blockIndex] == current)
             {
                 return 1;
             }
@@ -82,13 +82,13 @@ class Solution : Solver
 
         foreach (var c in new[] { '.', '#' })
         {
-            if (dots[(int)index] == c || dots[(int)index] == '?')
+            if (dots[index] == c || dots[index] == '?')
             {
                 if (c == '.' && current == 0)
                 {
                     answer += Resolve(dots, blocks, index + 1, blockIndex, 0);
                 }
-                else if (c == '.' && current > 0 && blockIndex < blocks.Count() && blocks[(int)blockIndex] == current)
+                else if (c == '.' && current > 0 && blockIndex < blocks.Count && blocks[blockIndex] == current)
                 {
                     answer += Resolve(dots, blocks, index + 1, blockIndex + 1, 0);
                 }
