@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using adventofcode.Utils;
 
 namespace AdventOfCode.Y2023.Day13;
@@ -18,14 +19,14 @@ class Solution : Solver
         var result = 0;
         for (var i = 0; i < blocks.Length; i++)
         {
-            TryFindMirror(blocks[i], i, out var res);
+            _ = TryFindMirror(blocks[i], i, out var res);
             result += res;
         }
 
         return result;
     }
 
-    private void TryFindMirror(string block, int key, out int result)
+    private bool TryFindMirror(string block, int key, out int result)
     {
         var lines = block.Split("\n", StringSplitOptions.RemoveEmptyEntries);
         var columns = block.SplitIntoColumns().ToList();
@@ -34,14 +35,14 @@ class Solution : Solver
         {
             if (lines.Take(i).Reverse().Zip(lines.Skip(i)).All(x => x.First == x.Second))
             {
-                if (mirrors.TryGetValue(key, out (int num, bool isHorizontal) value))
+                if (mirrors.TryGetValue(key, out var value))
                 {
                     if (value.isHorizontal && value.num == i) continue;
                 }
 
                 mirrors[key] = (i, true);
                 result = i * 100;
-                return;
+                return true;
             }
         }
 
@@ -56,16 +57,36 @@ class Solution : Solver
 
                 mirrors[key] = (i, false);
                 result = i;
-                return;
+                return true;
             }
         }
 
         result = 0;
+        return false;
     }
 
     public object PartTwo(string input)
     {
-        return 0;
+        var blocks = ParseBlocks(input);
+        var result = 0;
+        for (var j = 0; j < blocks.Length; j++)
+        {
+            var block = blocks[j];
+            for (var i = 0; i < block.Length; i++)
+            {
+                if (!".#".Contains(block[i])) continue;
+                var sb = new StringBuilder(block);
+
+                sb[i] = sb[i] == '.' ? '#' : '.';
+                if (TryFindMirror(sb.ToString(), j, out var res))
+                {
+                    result += res;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     private static string[] ParseBlocks(string input) =>
