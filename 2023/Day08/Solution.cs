@@ -10,6 +10,8 @@ namespace AdventOfCode.Y2023.Day08;
 [ProblemName("Haunted Wasteland")]
 class Solution : Solver
 {
+    private static readonly string[] Separator = { " = " };
+
     public object PartOne(string input)
     {
         var lines = input.Split("\n", StringSplitOptions.RemoveEmptyEntries);
@@ -28,12 +30,12 @@ class Solution : Solver
         return CompleteGhostsTravel(directions, map);
     }
 
-    private Dictionary<string, (string, string)> ParseMap(List<string> lines)
+    private static Dictionary<string, (string, string)> ParseMap(List<string> lines)
     {
         var map = new Dictionary<string, (string, string)>();
         foreach (var line in lines)
         {
-            var parts = line.Split(new[] { " = " }, StringSplitOptions.None);
+            var parts = line.Split(Separator, StringSplitOptions.None);
             var key = parts[0];
             var values = parts[1].Trim('(', ')').Split(',');
 
