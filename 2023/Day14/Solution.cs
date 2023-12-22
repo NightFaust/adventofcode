@@ -1,12 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Text;
 using adventofcode.Utils;
-using AngleSharp.Common;
-using AngleSharp.Html.Dom;
 
 namespace AdventOfCode.Y2023.Day14;
 
@@ -80,6 +74,90 @@ class Solution : Solver
 
     public object PartTwo(string input)
     {
-        return 0;
+        // For part 2, I used Go/Golang, check out the go.txt file
+        var grid = new Grid(input, true);
+        long result = 0;
+
+        for (var i = 0; i < 200; i++)
+        {
+            while (RollRocks(grid)) ;
+            grid.Rotate(Orientation.East);
+            while (RollRocks(grid)) ;
+            grid.Rotate(Orientation.East);
+            while (RollRocks(grid)) ;
+            grid.Rotate(Orientation.East);
+            while (RollRocks(grid)) ;
+            grid.Rotate(Orientation.East);
+        }
+        var cycleVals = new List<long>();
+        for (var i = 0; i < 200; i++)
+        {
+            while (RollRocks(grid)) ;
+            grid.Rotate(Orientation.East);
+            while (RollRocks(grid)) ;
+            grid.Rotate(Orientation.East);
+            while (RollRocks(grid)) ;
+            grid.Rotate(Orientation.East);
+            while (RollRocks(grid)) ;
+            grid.Rotate(Orientation.East);
+
+            var v = CalcLoad(grid);
+
+            if (cycleVals.Contains(v))
+            {
+                var j = cycleVals.LastIndexOf(v);
+                var cycleLen = (i - j);
+
+                var q = (1000000000 - 200 - i -1) % cycleLen;
+
+                var n = (q + j) % cycleLen;
+                result = cycleVals[n];
+
+                break;
+            }
+
+            cycleVals.Add(v);
+        }
+
+        return result;
+    }
+
+    private static bool RollRocks(Grid grid)
+    {
+        var didShift = false;
+        for (var y = grid.MinY; y + 1 < grid.MaxY; y++)
+        {
+            for (var x = grid.MinX; x < grid.MaxX; x++)
+            {
+                if (grid[x, y] == '.' && grid[x, y + 1] == 'O')
+                {
+                    grid[x, y + 1] = '.';
+                    grid[x, y] = 'O';
+                    didShift = true;
+                }
+            }
+        }
+
+        return didShift;
+    }
+
+    private static long CalcLoad(Grid grid)
+    {
+        var result = 0L;
+        grid.Rotate(Orientation.South);
+
+        for (var y = grid.MinY; y < grid.MaxY; y++)
+        {
+            for (var x = grid.MinX; x < grid.MaxX; x++)
+            {
+                if (grid[x, y] == 'O')
+                {
+                    result += y + 1;
+                }
+            }
+        }
+
+        grid.Rotate(Orientation.South);
+        return result;
     }
 }

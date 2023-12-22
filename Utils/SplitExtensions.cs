@@ -5,7 +5,7 @@ using System.Text;
 
 namespace adventofcode.Utils;
 
-public static class Utilities
+public static class SplitExtensions
 {
     /// <summary>
     /// Splits the input into columns, this is sometimes nice for maps drawing. 
